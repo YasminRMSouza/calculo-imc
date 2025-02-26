@@ -20,43 +20,45 @@ Imprima no console o resultado.
 
 const prompt = require('prompt-sync')();
 
-function calculoIMC() {
-    
-    let peso, altura;
+function calculoIMC(pesoCorrigido, alturaCorrigida) {
+    return pesoCorrigido / Math.pow(alturaCorrigida, 2);
+}
 
-    peso = prompt("Digite seu peso em Kg: ");
-        if(parseFloat(peso.replace("," , ".")) <= 0 || isNaN(peso) || !peso) {
-            console.log("Entrada inválida! Digite apenas números, e se preciso colocar vírgula ou ponto no número decimal!");
-            return calculoIMC();
-        }
-    
-    altura = prompt("Digite sua altura em metros: ")
-        if(parseFloat(altura.replace("," , ".")) <= 0 || isNaN(altura) || !altura) {
-            console.log("Entrada inválida! Digite apenas números, e se preciso colocar vírgula ou ponto no número decimal!");
-            return calculoIMC();
-        }
-
-    const pesoCorrigido = parseFloat(peso.replace("," , "."));
-    const alturaCorrigida = parseFloat(altura.replace("," , "."));
-
-    let imc = pesoCorrigido / (alturaCorrigida**2);
-    imc = imc.toFixed(2);
-
-    let classificacao = "";
-    
+function classificacaoIMC(imc) {
     if (imc < 18.5) {
-        classificacao = ("Você está abaixo do peso ideal!");
-    }else if (imc >= 18.5 && imc < 25) {
-        classificacao = ("Você está no seu peso normal!");
-    }else if (imc >= 25 && imc < 30) {
-        classificacao = ("Você está acima do peso!")
-    }else if (imc >= 30 && imc < 40) {
-        classificacao = ("Você está obeso!")
+        return 'Você está abaixo do peso ideal!'
+    }
+    else if (imc >= 18.5 && imc < 25) {
+        return 'Você está no seu peso normal!'
+    }
+    else if (imc >= 25 && imc < 30) {
+        return 'Você está acima do peso!'
+    }
+    else if (imc >= 30 && imc < 40) {
+        return 'Você está obeso!'
     }else {
-        classificacao = ("Você está com obesidade grave!")
+        return 'Você está com obesidade grave!'
+    }
+}
+
+//função anônima - main
+(function () {
+let peso, altura;
+
+peso = prompt("Digite seu peso em Kg: ").replace(",", ".");
+    if(peso <= 0 || isNaN(peso) || !peso) {
+        console.log("Entrada inválida! Digite apenas números, e se preciso colocar vírgula ou ponto no número decimal!");
+        return calculoIMC();
     }
 
-    console.log(`Seu IMC é: ${imc}\nClassificação: ${classificacao}`);
-} 
+altura = prompt("Digite sua altura em metros: ").replace("," , ".");
+    if(altura <= 0 || isNaN(altura) || !altura) {
+        console.log("Entrada inválida! Digite apenas números, e se preciso colocar vírgula ou ponto no número decimal!");
+        return calculoIMC();
+    }
 
-calculoIMC();
+const pesoCorrigido = parseFloat(peso.replace("," , "."));
+const alturaCorrigida = parseFloat(altura.replace("," , "."));
+const imc = calculoIMC(pesoCorrigido, alturaCorrigida).toFixed(2);
+console.log(`Seu IMC é: ${imc}\nClassificação: ${classificacaoIMC(imc)}`);
+})();
